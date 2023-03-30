@@ -50,29 +50,26 @@ return (
     <Navbar />
     <Home/>
     <ul className="py-10">
-  <h1 className="text-3xl font-bold mb-4 text-green-500 text-center">Listado de frutas</h1>
-  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:grid-rows-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ">
-    {documentosUnidos.map((doc) => (
-      <li key={doc.id} className="mx-6 mt-6 ">
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden h-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
-          <Link to={`/${doc.id}`} className="h-full w-full">
-            <div className="bg-gray-200 text-gray-700 text-lg font-bold px-4 py-2">{doc.fruitName}</div>
-            <hr />
-            <div className="p-4">
-              <strong>Originario de:</strong> {doc.origin}
+      <h1 className="text-3xl font-bold mb-4 text-green-500 text-center">Listado de frutas</h1>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:grid-rows-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ">
+        {documentosUnidos.map((doc) => (
+          <li key={doc.id} className="mx-6 mt-6 ">
+            <div className="bg-white shadow-lg rounded-lg overflow-hidden h-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
+              <Link to={`/${doc.id}`} className="h-full w-full">
+                <div className="bg-gray-200 text-gray-700 text-lg font-bold px-4 py-2">{doc.fruitName}</div>
+                <hr />
+                <div className="p-4">
+                  <strong>Originario de:</strong> {doc.origin}
+                </div>
+                <div className="p-4">
+                  <strong>Tiempo de vida:</strong> {doc.lifeCycle}
+                </div>
+              </Link>
             </div>
-            <div className="p-4">
-              <strong>Tiempo de vida:</strong> {doc.lifeCycle}
-            </div>
-          </Link>
-        </div>
       </li>
     ))}
   </div>
 </ul>
-
-
-
 </div>
 );
 }
