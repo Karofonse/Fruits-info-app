@@ -1,14 +1,9 @@
 import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar/Navbar'
 import { db } from "./Firestore";
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, query, where, getDocs, getDoc, doc, orderBy, onSnapshot } from 'firebase/firestore';
-import {
-  createBrowserRouter,
-  Link,
-  RouterProvider,
-} from "react-router-dom";
-import About from './About';
+import { collection, query, where, getDocs, orderBy,  } from 'firebase/firestore';
+import {Link} from "react-router-dom";
+import Home from './components/Navbar/Home';
 
 function App() {
 
@@ -51,26 +46,34 @@ const [documentosUnidos, setDocumentosUnidos] = useState([]);
   }, []);
   
 return (
-  <ul>
-    <h1 className='text-center text-4xl text-green-700 font-medium '>Listado de frutas</h1>
-    <div className=''>
-      {documentosUnidos.map((doc) => (
-        <li key={doc.id}>
-          <div className='flex items-center justify-center min-h-screen container mx-auto'>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              <div className="rounded-xl overflow-hidden "></div>
-              <Link to={`/${doc.id}` }className='text-red-500'>
-                Nombre : {doc.fruitName}
-                <hr />
-                Flor: {doc.origin}
-                <hr />
-                Id: {doc.id}</Link>
+  <div className='text-center'>
+    <Navbar />
+    <Home/>
+    <ul className="py-10">
+  <h1 className="text-3xl font-bold mb-4 text-green-500 text-center">Listado de frutas</h1>
+  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:grid-rows-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ">
+    {documentosUnidos.map((doc) => (
+      <li key={doc.id} className="mx-6 mt-6 ">
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden h-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
+          <Link to={`/${doc.id}`} className="h-full w-full">
+            <div className="bg-gray-200 text-gray-700 text-lg font-bold px-4 py-2">{doc.fruitName}</div>
+            <hr />
+            <div className="p-4">
+              <strong>Originario de:</strong> {doc.origin}
             </div>
-          </div>
-        </li>
-      ))}
+            <div className="p-4">
+              <strong>Tiempo de vida:</strong> {doc.lifeCycle}
+            </div>
+          </Link>
+        </div>
+      </li>
+    ))}
   </div>
 </ul>
+
+
+
+</div>
 );
 }
 
