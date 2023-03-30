@@ -1,50 +1,63 @@
 import React from 'react'
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { collection, getDocs, query, where, orderBy, doc, } from "firebase/firestore";
-
+import { collection, getDocs, query, where, orderBy, doc} from "firebase/firestore";
 import { db } from "./Firestore";
+import { Bars } from "react-loader-spinner";
 
 function About() {
-    const [documentos, setDocumentos] = useState(null);
-    
-    const [documentosUnidos, setDocumentosUnidos] = useState([]);
+
+    const [document, setDocument] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     let { id } = useParams();
-        useEffect(() => {
-        const obtenerDocumentos = async () => {
-            const doc2Query = query(
-            collection(db, "user-flores"),
-            where("id", "==", id)
-            );
-            const querySnapshot = await getDocs(doc2Query);
-            if (querySnapshot.docs.length > 0) {
-            const doc2 = querySnapshot.docs[0].data();
-            setDocumentos(doc2);
-            } else {
-            console.log("No se encontró el documento");
+    let doc2Data;
+
+    useEffect(() => {
+
+        setIsLoading(true);
+
+        setTimeout(() => {
+            async function fetchData() {
+                const query2 = query(collection(db, "fruits-detail"), orderBy("id","asc"));
+                const doc2 = await getDocs(query2);
+                const doc = doc2.docs.find(doc => doc.id === id);
+                doc2Data = doc2.docs[id-1].data();
+                console.log("doc2Data", doc2Data)
+                setIsLoading(false);
+                setDocument(doc2Data);
+                
             }
-        };
-        obtenerDocumentos();
-        }, [id]);
+            fetchData().catch(error => {
+                console.error(error);
+            });
+        },5000)
     
-        return (
-        <div>
-            <ul>
-            <h1 >Listado de Frutas</h1>
-            {documentos && (
-                <li>
-                <Link to="/1" >{documentos.campo}</Link>
-                <p>{documentos.description}</p>
-                <ul>
-                    <li>{documentos.family}</li>
-                    <li>{documentos.producingCountries.country}</li>
-                    <li>{documentos.maturationFruit}</li>
-                </ul>
-                </li>
-            )}
-            </ul>
-        </div>
-        );
+}, [id]);
+
+return (
+    <ul>
+        <h1 className='text-center text-4xl text-green-700 font-medium '>Listado de frutas</h1>
+        {isLoading ? (
+            console.log("isLoading", isLoading),
+            <Bars
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="bars-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+        />
+        ) : (
+            <div>
+                <h1>About</h1>
+                <p>{document?.bloom}</p>
+                <p>{document?.climaticZone}</p>
+                <p>{document?.family}</p>
+            </div>  
+        )}
+</ul>
+);
 }
     
 

@@ -14,10 +14,12 @@ function App() {
 
   // unir dos colecciones por su id, funciona perfecto
 const [documentosUnidos, setDocumentosUnidos] = useState([]);
+
+
   useEffect(() => {
     async function fetchData() {
-      const query1 = query(collection(db, "user"), orderBy("id","asc"));//
-      const query2 = query(collection(db, "user-flores"), orderBy("id","asc"));
+      const query1 = query(collection(db, "fruits"), orderBy("id","asc"));//
+      const query2 = query(collection(db, "fruits-detail"), orderBy("id","asc"));
 
       const data1 = await getDocs(query1);
       const data2 = await getDocs(query2);
@@ -32,10 +34,10 @@ const [documentosUnidos, setDocumentosUnidos] = useState([]);
         ...doc.data(),
       }));
 
-      const documentosUnidos = await Promise.all(
+      const documentosUnidos  = await Promise.all(
         documentos1.map(async (doc1) => {
           const doc2Query = query(
-            collection(db, "user-flores"),
+            collection(db, "fruits-detail"),
             where("id", "==", doc1.id)
           );
           const doc2 = await getDocs(doc2Query);
@@ -43,14 +45,13 @@ const [documentosUnidos, setDocumentosUnidos] = useState([]);
           return { ...doc1, ...doc2Data };
         })
       );
-      setDocumentosUnidos(documentosUnidos);
+    setDocumentosUnidos(documentosUnidos);
     }
     fetchData();
   }, []);
   
 return (
   <ul>
-  
     <h1 className='text-center text-4xl text-green-700 font-medium '>Listado de frutas</h1>
     <div className=''>
       {documentosUnidos.map((doc) => (
@@ -59,9 +60,9 @@ return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               <div className="rounded-xl overflow-hidden "></div>
               <Link to={`/${doc.id}` }className='text-red-500'>
-                Nombre : {doc.campo}
+                Nombre : {doc.fruitName}
                 <hr />
-                Flor: {doc.flores}
+                Flor: {doc.origin}
                 <hr />
                 Id: {doc.id}</Link>
             </div>
